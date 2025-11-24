@@ -1,50 +1,83 @@
-chrome.runtime.onMessage.addListener((msg) => {
-    if (msg.action === "toggleBarra") {
+
+
+chrome.runtime.onMessage.addListener((msg) => {    if (msg.action === "toggleBarra") {
         toggleBarra();
     }
 });
 
+// Posición de la barra
+function toggleBarPosition() {
+    const barra = document.getElementById("mi-barra-superior");
+    if (!barra) return;
+
+    chrome.storage.sync.get("barraPos", ({ barraPos }) => {
+        let newPos = barraPos === "left" ? "right" : "left";
+
+        // Aplicar nueva posición visual
+        applyBarPosition(barra, newPos);
+
+        // Guardar en chrome.storage
+        chrome.storage.sync.set({ barraPos: newPos });
+    });
+}
+function applyBarPosition(barra, pos) {
+    if (pos === "left") {
+        barra.style.left = "0";
+        barra.style.right = "";
+    } else {
+        barra.style.right = "0";
+        barra.style.left = "";
+    }
+}
+
+
+//Habilitar y deshabilitar barra con comando
 //Habilitar y deshabilitar barra con comando
 function toggleBarra() {
     let barra = document.getElementById("mi-barra-superior");
 
     if (!barra) {
+
         barra = document.createElement("div");
         barra.id = "mi-barra-superior";
 
-    Object.assign(barra.style, {
-        position: "fixed",
-        top: "0",
-        right: "0",
-        width: "280px",
-        height: "100vh",
-        backgroundColor: "#1a1a1a",
-        color: "white",
-        fontSize: "14px",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "stretch",
-        padding: "12px",
-        gap: "12px",
-        zIndex: "999999999",
-        borderLeft: "2px solid #333",
-        boxShadow: "-2px 0px 5px rgba(0,0,0,0.4)",
-        overflowY: "auto"
-    });
+        Object.assign(barra.style, {
+            position: "fixed",
+            top: "0",
+            width: "280px",
+            height: "100vh",
+            backgroundColor: "#1a1a1a",
+            color: "white",
+            fontSize: "14px",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "stretch",
+            padding: "12px",
+            gap: "12px",
+            zIndex: "999999999",
+            borderLeft: "2px solid #333",
+            boxShadow: "-2px 0px 5px rgba(0,0,0,0.4)",
+            overflowY: "auto"
+        });
 
         document.documentElement.appendChild(barra);
 
-        // IMPORTANTE → botones solo se crean cuando la barra se crea
-        ensureUtilityButtons();
+        // ⬇️ PRIMERO APLICAR POSICIÓN
+        chrome.storage.sync.get("barraPos", ({ barraPos }) => {
+            if (!barraPos) barraPos = "right";
+            applyBarPosition(barra, barraPos);
+
+            // ⬇️ DESPUÉS crear los botones (cuando ya está colocada)
+            ensureUtilityButtons();
+        });
 
     } else {
-    const wasHidden = (barra.style.display === "none");
-    barra.style.display = wasHidden ? "flex" : "none";
+        const wasHidden = (barra.style.display === "none");
+        barra.style.display = wasHidden ? "flex" : "none";
+        if (wasHidden) clean_data();
+    }
+}
 
-    // Si estaba oculta y ahora se muestra → limpiamos datos
-    if (wasHidden) clean_data();
-}
-}
 
 //Función para ocultar la barra.
 function hide_barra() {
@@ -344,7 +377,7 @@ function render_shop_name(name) { //Nombre del taller
 
     applyDataButtonStyle(btn, !!name);
 }
-function render_obs(value) { //Observaciones
+function render_obs(value) { //Observaciones completas
     let btn = document.getElementById("btn_obs");
 
     if (!btn) {
@@ -352,7 +385,22 @@ function render_obs(value) { //Observaciones
         btn.id = "btn_obs";
 
         btn.addEventListener("click", () => {
-            if (value) navigator.clipboard.writeText(value);
+
+            // Tomar todos los valores necesarios
+            const OR = get_order_id();
+            const MAT = get_matricula();        // matrícula invertida
+            const USER = get_contact_name();
+            const TEL = get_contact_phone();
+            const OBS = get_obs();              // observaciones del HTML
+
+            // Formato final EXACTO como lo pediste
+            const finalText =
+`Orden ${OR}  -  Matrícula ${MAT}
+Usuario ${USER}  - Teléfono ${TEL}
+Observaciones: ${OBS}`;
+
+            // Copiar a portapapeles
+            navigator.clipboard.writeText(finalText);
         });
 
         const container = ensureInnerContainer();
@@ -364,6 +412,7 @@ function render_obs(value) { //Observaciones
 
     applyDataButtonStyle(btn, !!value);
 }
+
 function render_whatsapp_button(phone) {
     let btn = document.getElementById("btn_whatsapp");
 
@@ -435,9 +484,21 @@ function get_state() {  //Estado de la orden
     const el = document.getElementById("estPptoCab");
     return el ? el.textContent.trim() : "";
 }
-function get_matricula() { //Matrícula
+function get_matricula() { // Matricula
     const el = document.getElementById("matricula");
-    return el ? el.value.trim() : "";
+    if (!el) return "";
+
+    const raw = el.value.trim().toUpperCase();
+
+    let letras = "";
+    let numeros = "";
+
+    for (const char of raw) {
+        if (/[A-Z]/.test(char)) letras += char;
+        else if (/\d/.test(char)) numeros += char;
+    }
+
+    return numeros + letras;
 }
 function get_kilometros() { 
     const el = document.getElementById("kilometros");
@@ -578,6 +639,14 @@ function ensureInfoButton() {
 
         infoContainer.appendChild(btnInfo);
     }
+
+    // BOTÓN PARA MOVER BARRA
+if (!document.getElementById("btn_move_bar")) {
+    const btnMove = createSimpleButton("MOVER BARRA", toggleBarPosition);
+    btnMove.id = "btn_move_bar";
+    infoContainer.appendChild(btnMove);
+}
+
 }
 
 

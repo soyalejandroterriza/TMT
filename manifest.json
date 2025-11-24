@@ -4,7 +4,7 @@
   "version": "1.0",
   "description": "NG Cherrypicking tool --- Pulsa Ctrl + Shift + Espacio en una página de orden de NG para habilitar.",
 
-  "permissions": ["activeTab", "scripting"],
+  "permissions": ["activeTab", "scripting", "storage"],
 
   "background": {
     "service_worker": "background.js"
