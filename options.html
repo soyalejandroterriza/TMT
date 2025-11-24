@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>NG CPT - Configuración</title>
+    <style>
+        body {
+            font-family: Arial;
+            padding: 20px;
+        }
+        label {
+            font-size: 18px;
+            cursor: pointer;
+        }
+        .section {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Configuración de NG CPT</h2>
+
+<div class="section">
+    <label>
+        <input type="checkbox" id="autoOpen">
+        Activar apertura automática de la herramienta al visitar una orden de NG
+    </label>
+</div>
+
+<div class="section">
+    <label for="barraPos" style="font-size:18px;">
+        <select id="barraPos" style="font-size:16px; padding:6px;">
+        <option value="right">Derecha</option>
+        <option value="left">Izquierda</option>
+    </select>
+        Posición por defecto de la barra (puedes moverla en cada OR, pero se abrirá aquí cuando visites una nueva):
+    </label>
+    
+</div>
+
+<script src="options.js"></script>
+
+</body>
+</html>

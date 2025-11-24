@@ -9,14 +9,22 @@ chrome.runtime.onMessage.addListener((msg) => {    if (msg.action === "toggleBar
 (function autoOpenBar() {
     const url = window.location.href;
 
-    // Coincide con orden.html?id=XXXX
     if (url.includes("/orden.html?id=")) {
-        // Esperar un poco para que el DOM esté listo
-        setTimeout(() => {
-            toggleBarra();
-        }, 300);
+
+        chrome.storage.sync.get("autoOpenBar", ({ autoOpenBar }) => {
+
+            if (autoOpenBar === undefined) {
+                autoOpenBar = true;
+                chrome.storage.sync.set({ autoOpenBar: true });
+            }
+
+            if (autoOpenBar) {
+                toggleBarra();
+            }
+        });
     }
 })();
+
 
 
 // Posición de la barra
@@ -45,7 +53,6 @@ function applyBarPosition(barra, pos) {
 }
 
 
-//Habilitar y deshabilitar barra con comando
 //Habilitar y deshabilitar barra con comando
 function toggleBarra() {
     let barra = document.getElementById("mi-barra-superior");
@@ -172,7 +179,7 @@ function createSimpleButton(text, onClick) {
 
 // Función para limpiar todos los datos atrapados.
 function clean_data() {
-    // 🔥 Restaurar botón TOMAR DATOS
+    // Restaurar botón TOMAR DATOS
     const btnGet = document.getElementById("btn_get_data");
     if (btnGet) btnGet.style.display = "block";
 
@@ -680,13 +687,12 @@ function ensureInfoButton() {
 
     let infoContainer = document.getElementById("info_container");
 
-    // Crear container si no existe
     if (!infoContainer) {
         infoContainer = document.createElement("div");
         infoContainer.id = "info_container";
 
         Object.assign(infoContainer.style, {
-            marginTop: "auto",      // 🔥 Push hacia abajo
+            marginTop: "auto",
             width: "100%",
             paddingTop: "12px"
         });
@@ -695,27 +701,36 @@ function ensureInfoButton() {
         barra.appendChild(infoContainer);
     }
 
-    // Crear botón si no existe
+    // Botón INFO
     if (!document.getElementById("btn_info")) {
         const btnInfo = createSimpleButton("INFO", () => {
             alert(
                 "NG CPT\n\n" +
                 "22/11/2025\n\n" +
                 "Versión: 1.0\n"
-);
+            );
         });
         btnInfo.id = "btn_info";
-
         infoContainer.appendChild(btnInfo);
     }
 
-    // BOTÓN PARA MOVER BARRA
-if (!document.getElementById("btn_move_bar")) {
-    const btnMove = createSimpleButton("MOVER BARRA", toggleBarPosition);
-    btnMove.id = "btn_move_bar";
-    infoContainer.appendChild(btnMove);
+    // Botón MOVER BARRA
+    if (!document.getElementById("btn_move_bar")) {
+        const btnMove = createSimpleButton("MOVER BARRA", toggleBarPosition);
+        btnMove.id = "btn_move_bar";
+        infoContainer.appendChild(btnMove);
+    }
+
+    // Botón CONFIGURACIÓN
+    if (!document.getElementById("btn_options")) {
+        const btnOptions = createSimpleButton("CONFIGURACIÓN", () => {
+            chrome.runtime.sendMessage({ action: "openOptions" });
+        });
+
+        btnOptions.id = "btn_options";
+        infoContainer.appendChild(btnOptions);
+    }
 }
 
-}
 
 

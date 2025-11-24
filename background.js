@@ -11,3 +11,9 @@ chrome.commands.onCommand.addListener((command) => {
 chrome.action.onClicked.addListener((tab) => {
     chrome.tabs.sendMessage(tab.id, { action: "toggleBarra" });
 });
+
+chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
+    if (msg.action === "openOptions") {
+        chrome.runtime.openOptionsPage();
+    }
+});
