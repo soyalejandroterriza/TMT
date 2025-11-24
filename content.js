@@ -172,6 +172,10 @@ function createSimpleButton(text, onClick) {
 
 // Función para limpiar todos los datos atrapados.
 function clean_data() {
+    // 🔥 Restaurar botón TOMAR DATOS
+    const btnGet = document.getElementById("btn_get_data");
+    if (btnGet) btnGet.style.display = "block";
+
 
     const ids = [
         "btn_order_id",
@@ -203,6 +207,11 @@ function clean_data() {
 
 // Función raiz para GET_DATA
 function get_data() {
+    // Ocultar botón TOMAR DATOS después de usarlo
+    const btnGet = document.getElementById("btn_get_data");
+    if (btnGet) btnGet.style.display = "none";
+
+
     const order_id = get_order_id();
     render_order_id(order_id);
 
