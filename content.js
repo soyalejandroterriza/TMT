@@ -5,6 +5,20 @@ chrome.runtime.onMessage.addListener((msg) => {    if (msg.action === "toggleBar
     }
 });
 
+// Detectar automáticamente si estamos en una orden NG
+(function autoOpenBar() {
+    const url = window.location.href;
+
+    // Coincide con orden.html?id=XXXX
+    if (url.includes("/orden.html?id=")) {
+        // Esperar un poco para que el DOM esté listo
+        setTimeout(() => {
+            toggleBarra();
+        }, 300);
+    }
+})();
+
+
 // Posición de la barra
 function toggleBarPosition() {
     const barra = document.getElementById("mi-barra-superior");
@@ -71,7 +85,7 @@ function toggleBarra() {
             ensureUtilityButtons();
 
             // ⬇️ Y FINALMENTE, lanzar GET automáticamente
-            get_data();
+            //get_data(); No lo lanzamos automáticmaente para prevenir que la barra se cree y se rellene de manera automática con campos faltantes. NG no sirve todos los datos de manera simultánea.
         });
 
     } else {
@@ -216,7 +230,7 @@ function get_data() {
     const shop = get_shop_info();
     render_shop_name(shop.name);
     render_shop_zip(shop.zip);
-    
+
     const cita = get_cita();
     render_cita(cita);
 
