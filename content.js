@@ -62,21 +62,30 @@ function toggleBarra() {
 
         document.documentElement.appendChild(barra);
 
-        // ⬇️ PRIMERO APLICAR POSICIÓN
+        // ⬇️ PRIMERO aplicar posición
         chrome.storage.sync.get("barraPos", ({ barraPos }) => {
             if (!barraPos) barraPos = "right";
             applyBarPosition(barra, barraPos);
 
-            // ⬇️ DESPUÉS crear los botones (cuando ya está colocada)
+            // ⬇️ DESPUÉS crear botones
             ensureUtilityButtons();
+
+            // ⬇️ Y FINALMENTE, lanzar GET automáticamente
+            get_data();
         });
 
     } else {
         const wasHidden = (barra.style.display === "none");
+
         barra.style.display = wasHidden ? "flex" : "none";
-        if (wasHidden) clean_data();
+
+        if (wasHidden) {
+            clean_data();
+            get_data(); // ⬅️ mostrar → refrescar datos automáticamente
+        }
     }
 }
+
 
 
 //Función para ocultar la barra.
@@ -207,6 +216,10 @@ function get_data() {
     const shop = get_shop_info();
     render_shop_name(shop.name);
     render_shop_zip(shop.zip);
+    
+    const cita = get_cita();
+    render_cita(cita);
+
     
     render_separator();
 
@@ -412,7 +425,6 @@ Observaciones: ${OBS}`;
 
     applyDataButtonStyle(btn, !!value);
 }
-
 function render_whatsapp_button(phone) {
     let btn = document.getElementById("btn_whatsapp");
 
@@ -466,6 +478,27 @@ function render_separator(id = "") {
 
     sep.textContent = ""; // ✔ vacío/invisible
 }
+function render_cita(value) { // Cita de taller
+    let btn = document.getElementById("btn_cita");
+
+    if (!btn) {
+        btn = document.createElement("button");
+        btn.id = "btn_cita";
+
+        btn.addEventListener("click", () => {
+            if (value) navigator.clipboard.writeText(value);
+        });
+
+        const container = ensureInnerContainer();
+        container.appendChild(btn);
+    }
+
+    btn.textContent = value ? `Cita: ${value}` : "Cita: NULO";
+    btn.disabled = !value;
+
+    applyDataButtonStyle(btn, !!value);
+}
+
 
 
 
@@ -543,6 +576,19 @@ function get_obs() { //Observaciones
     if ("value" in el) return el.value.trim();
     return el.textContent.trim();
 }
+function get_cita() { // Cita previa
+    const el = document.getElementById("cita_previa_content");
+    if (!el) return "";
+
+    const raw = el.value ? el.value.trim() : el.textContent.trim();
+
+    // El formato es "26/11/2025 13:08"
+    // Nos quedamos SOLO con la fecha (primer bloque antes del espacio)
+    const date = raw.split(" ")[0];
+
+    return date;
+}
+
 
 
 // Estilo estandarizado para botones de datos
