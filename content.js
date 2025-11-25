@@ -440,7 +440,11 @@ function render_obs(value) { //Observaciones completas
             const finalText =
 `Orden ${OR}  -  Matrícula ${MAT}
 Usuario ${USER}  - Teléfono ${TEL}
-Observaciones: ${OBS}`;
+Observaciones: ${OBS}
+
+
+
+`;
 
             // Copiar a portapapeles
             navigator.clipboard.writeText(finalText);
