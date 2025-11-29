@@ -21,14 +21,27 @@
 
 <h2>Configuración de NG CPT</h2>
 
-<div class="section">
+<div class="section">   <!-- Apertura automática -->
     <label>
         <input type="checkbox" id="autoOpen">
         Activar apertura automática de la herramienta al visitar una orden de NG
     </label>
 </div>
 
-<div class="section">
+<hr>
+
+<div class="section"> <!-- Corrector de matrículas -->
+    <label>
+        <input type="checkbox" id="enableMatShortcut">
+        Activar el atajo para el corrector de matrículas de NG. <br>
+        Utilízalo seleccionando una matrícula válida y pulsando Ctrl + Shift + X<br>
+        <h5>NOTA: Puede generar conflictos con matrículas de policía y guardia civil, que comienzan con letras.</h5>
+    </label>
+</div>
+
+<hr>
+
+<div class="section">   <!-- Posición por defecto de la barra -->
     <label for="barraPos" style="font-size:18px;">
         <select id="barraPos" style="font-size:16px; padding:6px;">
         <option value="right">Derecha</option>
@@ -38,6 +51,21 @@
     </label>
     
 </div>
+
+<hr>
+
+<div class="section">  <!-- Nombre del técnico -->
+    <label for="nombreTecnico" style="font-size:18px; display:block; margin-bottom:6px;">
+        Nombre del técnico (se usará al generar textos):
+    </label>
+    <input type="text" id="nombreTecnico" 
+           style="font-size:16px; padding:6px; width:280px;"
+           placeholder="de la red de flotas">
+</div>
+
+
+
+
 
 <script src="options.js"></script>
 

@@ -16,7 +16,15 @@
         "default": "Ctrl+Shift+Space"
       },
       "description": "Mostrar / Ocultar barra"
-    }
+    },
+
+    "fix-matricula": {
+    "suggested_key": {
+        "default": "Ctrl+Shift+X"
+    },
+    "description": "Corregir matrícula seleccionada"
+}
+
   },
 
   "options_page": "options.html",

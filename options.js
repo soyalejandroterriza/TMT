@@ -32,4 +32,25 @@ document.addEventListener("DOMContentLoaded", () => {
         chrome.storage.sync.set({ barraPos: e.target.value });
     });
 
+
+    // === NOMBRE DEL TÉCNICO ===
+
+    // Cargar valor guardado
+    chrome.storage.sync.get("nombreTecnico", ({ nombreTecnico }) => {
+        document.getElementById("nombreTecnico").value = nombreTecnico || "de la red de flotas";
+    });
+
+    // Guardar cuando el usuario escribe
+    document.getElementById("nombreTecnico").addEventListener("input", (e) => {
+        chrome.storage.sync.set({ nombreTecnico: e.target.value.trim() });
+    });
+
+        // --- ACTIVAR ATAJO CORRECTOR MATRICULAS ---
+    chrome.storage.sync.get("enableMatShortcut", ({ enableMatShortcut }) => {
+        document.getElementById("enableMatShortcut").checked = enableMatShortcut ?? true;
+    });
+
+    document.getElementById("enableMatShortcut").addEventListener("change", (e) => {
+        chrome.storage.sync.set({ enableMatShortcut: e.target.checked });
+    });
 });

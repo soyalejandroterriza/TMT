@@ -1,9 +1,17 @@
+// Listeners
 
-
-chrome.runtime.onMessage.addListener((msg) => {    if (msg.action === "toggleBarra") {
+chrome.runtime.onMessage.addListener((msg) => {    if (msg.action === "toggleBarra") { //Listener de toggle bar
         toggleBarra();
     }
 });
+
+chrome.runtime.onMessage.addListener((msg) => { // Listener del atajo corrector de matrículas
+    if (msg.action === "fixMatriculaCommand") {
+        fixSelectedMatricula();
+    }
+});
+
+
 
 // Detectar automáticamente si estamos en una orden NG
 (function autoOpenBar() {
@@ -24,6 +32,41 @@ chrome.runtime.onMessage.addListener((msg) => {    if (msg.action === "toggleBar
         });
     }
 })();
+
+// Corrige una matrícula a nivel interno (pasa "ABC1234" → "1234ABC")
+function fixMatricula(raw) {
+    raw = raw.toUpperCase().replace(/\s/g, "");
+    const letras = raw.replace(/\d/g, "");
+    const numeros = raw.replace(/\D/g, "");
+    return numeros + letras;
+}
+
+// Aplica la corrección al texto seleccionado dentro de un input/textarea
+function fixSelectedMatricula() {
+    const active = document.activeElement;
+
+    if (!active) return;
+    if (!(active.tagName === "INPUT" || active.tagName === "TEXTAREA")) return;
+    if (typeof active.selectionStart !== "number") return;
+
+    const selStart = active.selectionStart;
+    const selEnd = active.selectionEnd;
+
+    if (selStart === selEnd) return; // no hay selección
+
+    const selected = active.value.substring(selStart, selEnd);
+    const fixed = fixMatricula(selected);
+
+    active.value =
+        active.value.substring(0, selStart) +
+        fixed +
+        active.value.substring(selEnd);
+
+    // colocar el cursor justo después del texto corregido
+    const newPos = selStart + fixed.length;
+    active.selectionStart = active.selectionEnd = newPos;
+}
+
 
 
 
@@ -441,6 +484,7 @@ function render_obs(value) { //Observaciones completas
 `Orden ${OR}  -  Matrícula ${MAT}
 Usuario ${USER}  - Teléfono ${TEL}
 Observaciones: ${OBS}
+
 
 
 
