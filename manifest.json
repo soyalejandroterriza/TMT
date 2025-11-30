@@ -50,5 +50,13 @@
       "128": "128.png"
     },
     "default_title": "NG CPT — Mostrar barra" 
+  },
+
+  "web_accessible_resources": [
+  {
+    "resources": ["mensaje_whatsapp.txt"],
+    "matches": ["<all_urls>"]
   }
+]
+
 }

@@ -3,15 +3,11 @@ document.addEventListener("DOMContentLoaded", () => {
     //
     // === AUTO-OPEN ===
     //
-
     chrome.storage.sync.get("autoOpenBar", ({ autoOpenBar }) => {
-
-        // Si nunca ha sido configurado → por defecto TRUE
         if (autoOpenBar === undefined) {
             autoOpenBar = true;
             chrome.storage.sync.set({ autoOpenBar: true });
         }
-
         document.getElementById("autoOpen").checked = autoOpenBar;
     });
 
@@ -21,9 +17,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
+    //
     // === POSICIÓN DE BARRA ===
-
-
+    //
     chrome.storage.sync.get("barraPos", ({ barraPos }) => {
         document.getElementById("barraPos").value = barraPos || "right";
     });
@@ -33,19 +29,31 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
 
+
+    //
     // === NOMBRE DEL TÉCNICO ===
+    //
+    chrome.storage.sync.get("technicianName", ({ technicianName }) => {
 
-    // Cargar valor guardado
-    chrome.storage.sync.get("nombreTecnico", ({ nombreTecnico }) => {
-        document.getElementById("nombreTecnico").value = nombreTecnico || "de la red de flotas";
+        // Valor por defecto
+        if (!technicianName) {
+            technicianName = "TECNICO";
+            chrome.storage.sync.set({ technicianName });
+        }
+
+        document.getElementById("technicianName").value = technicianName;
     });
 
-    // Guardar cuando el usuario escribe
-    document.getElementById("nombreTecnico").addEventListener("input", (e) => {
-        chrome.storage.sync.set({ nombreTecnico: e.target.value.trim() });
+    // Guardar cuando escribe
+    document.getElementById("technicianName").addEventListener("input", (e) => {
+        chrome.storage.sync.set({ technicianName: e.target.value.trim() });
     });
 
-        // --- ACTIVAR ATAJO CORRECTOR MATRICULAS ---
+
+
+    //
+    // === ACTIVAR ATAJO CORRECTOR MATRÍCULAS ===
+    //
     chrome.storage.sync.get("enableMatShortcut", ({ enableMatShortcut }) => {
         document.getElementById("enableMatShortcut").checked = enableMatShortcut ?? true;
     });
@@ -53,4 +61,5 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("enableMatShortcut").addEventListener("change", (e) => {
         chrome.storage.sync.set({ enableMatShortcut: e.target.checked });
     });
+
 });

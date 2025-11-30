@@ -7,6 +7,7 @@ chrome.commands.onCommand.addListener((command) => {
     }
 });
 
+// Escucha globalmente los atajos listados en manifest.json y evita errores si la pestaña no admite content scripts
 chrome.commands.onCommand.addListener((command) => {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
 

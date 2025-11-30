@@ -1,5 +1,8 @@
-// Listeners
+// Variable para el mensaje de WhatsApp
+window.msgWhatsAppReady = "";
 
+
+// Listeners
 chrome.runtime.onMessage.addListener((msg) => {    if (msg.action === "toggleBarra") { //Listener de toggle bar
         toggleBarra();
     }
@@ -11,6 +14,12 @@ chrome.runtime.onMessage.addListener((msg) => { // Listener del atajo corrector 
     }
 });
 
+// Carga el mensaje de whatsapp 
+async function loadTemplate(path) {
+    const url = chrome.runtime.getURL(path);
+    const resp = await fetch(url);
+    return await resp.text();
+}
 
 
 // Detectar automáticamente si estamos en una orden NG
@@ -183,7 +192,7 @@ function ensureInnerContainer() {
     return container;
 }
 
-// Crear botón genérico (para GET DATA, CLEAN, HIDE, etc)
+// Función para crear botón genérico
 function createSimpleButton(text, onClick) {
     const btn = document.createElement("button");
 
@@ -298,6 +307,23 @@ function get_data() {
 
     const obs = get_obs();
     render_obs(obs);
+
+    // Generar mensaje WhatsApp final y lo almacena en la variable
+    chrome.storage.sync.get("technicianName", (data) => {
+        const TEC = data.technicianName || "de la red de flotas";
+        const MAT = get_matricula();
+
+        // Cargar plantilla solo una vez
+        fetch(chrome.runtime.getURL("mensaje_whatsapp.txt"))
+            .then(r => r.text())
+            .then(template => {
+
+                window.msgWhatsAppReady = template
+                    .replace(/<MAT>/g, MAT)
+                    .replace(/<TECNICO>/g, TEC);
+            });
+    });
+
 }
 
 
@@ -510,14 +536,19 @@ function render_whatsapp_button(phone) {
         btn = document.createElement("button");
         btn.id = "btn_whatsapp";
 
+        // Nuevo comportamiento optimizado
         btn.addEventListener("click", () => {
-            if (phone) {
-                // Limpiar teléfono: quitar espacios, guiones, paréntesis, etc.
-                const cleanPhone = phone.replace(/\D/g, "");
+            if (!phone) return;
 
-                // Abrir en nueva pestaña
-                window.open(`https://wa.me/34${cleanPhone}`, "_blank");
+            const cleanPhone = phone.replace(/\D/g, "");
+
+            // Copiar mensaje ya precalculado
+            if (window.msgWhatsAppReady) {
+                navigator.clipboard.writeText(window.msgWhatsAppReady);
             }
+
+            // Abrir WhatsApp Web
+            window.open(`https://wa.me/34${cleanPhone}`, "_blank");
         });
 
         const container = ensureInnerContainer();
@@ -529,6 +560,8 @@ function render_whatsapp_button(phone) {
 
     applyDataButtonStyle(btn, !!phone);
 }
+
+
 function render_separator(id = "") {
 
     const separatorId = id || ("sep_" + Math.random().toString(36).substr(2, 5));
@@ -720,12 +753,6 @@ function ensureUtilityButtons() {
         const btnGet = createSimpleButton("TOMAR DATOS", get_data);
         btnGet.id = "btn_get_data";
         container.appendChild(btnGet);
-    }
-
-    if (!document.getElementById("btn_clean")) {
-        const btnClean = createSimpleButton("LIMPIAR", clean_data);
-        btnClean.id = "btn_clean";
-        container.appendChild(btnClean);
     }
 
     //INFO BUTTON SIEMPRE ABAJO
