@@ -1,0 +1,20 @@
+Esta extensión es una herramienta creada de forma independiente y no está afiliada, aprobada ni respaldada
+por Northgate, Serca ni por ninguna de sus empresas asociadas.
+
+Todos los datos utilizados por la extensión se procesan únicamente en el navegador del usuario,
+sin enviarse a servidores externos. La extensión no transmite ni comparte datos personales fuera del equipo del usuario.
+
+El usuario es el único responsable de verificar la exactitud de toda la información generada (mensajes, matrículas,
+observaciones, datos copiados, etc.). La herramienta no sustituye los procesos, comprobaciones ni protocolos oficiales
+de la empresa.
+
+Algunos textos sugeridos o funciones de esta herramienta pueden haber sido desarrollados o asistidos mediante
+tecnologías de inteligencia artificial. Aun así, el usuario es responsable de revisar y validar toda la información
+generada antes de utilizarla.
+
+
+Esta extensión no modifica, altera ni interfiere con el funcionamiento de otras plataformas corporativas.
+Únicamente muestra datos ya presentes en la página y facilita su lectura, copia y manipulación.
+
+El uso de esta extensión es totalmente voluntario.
+Su autor no asume ninguna responsabilidad derivada de errores, usos indebidos o consecuencias derivadas del uso de la misma.
