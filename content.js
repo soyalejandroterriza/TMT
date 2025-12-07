@@ -44,10 +44,19 @@ async function loadTemplate(path) {
 
 // Corrige una matrícula a nivel interno (pasa "ABC1234" → "1234ABC")
 function fixMatricula(raw) {
-    raw = raw.toUpperCase().replace(/\s/g, "");
+    // Eliminar TODOS los caracteres invisibles, espacios, tabs, newlines, etc.
+    // y convertir a mayúsculas
+    raw = raw.toUpperCase()
+        .replace(/\s/g, "")           // espacios normales
+        .replace(/[\u200B-\u200D\uFEFF]/g, "")  // espacios de ancho cero y otros invisibles Unicode
+        .replace(/[\u0000-\u001F\u007F-\u009F]/g, ""); // caracteres de control
+    
+    // Extraer solo letras y números
     const letras = raw.replace(/\d/g, "");
     const numeros = raw.replace(/\D/g, "");
-    return numeros + letras;
+    
+    // Asegurarse de que no queden espacios al inicio/final
+    return (numeros + letras).trim();
 }
 
 // Aplica la corrección al texto seleccionado dentro de un input/textarea
@@ -66,14 +75,24 @@ function fixSelectedMatricula() {
     const selected = active.value.substring(selStart, selEnd);
     const fixed = fixMatricula(selected);
 
-    active.value =
+    // Construir el nuevo valor sin caracteres invisibles
+    const newValue = 
         active.value.substring(0, selStart) +
         fixed +
         active.value.substring(selEnd);
 
-    // colocar el cursor justo después del texto corregido
-    const newPos = selStart + fixed.length;
-    active.selectionStart = active.selectionEnd = newPos;
+    // Usar setRangeText para una inserción más limpia (si está disponible)
+    // o asignar directamente el valor
+    if (active.setRangeText) {
+        active.setRangeText(fixed, selStart, selEnd, "end");
+        // Disparar evento input para que el campo se actualice correctamente
+        active.dispatchEvent(new Event('input', { bubbles: true }));
+    } else {
+        active.value = newValue;
+        // colocar el cursor justo después del texto corregido
+        const newPos = selStart + fixed.length;
+        active.selectionStart = active.selectionEnd = newPos;
+    }
 }
 
 
