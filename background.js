@@ -2,7 +2,10 @@
 chrome.commands.onCommand.addListener((command) => {
     if (command === "toggle-barra") {
         chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-            chrome.tabs.sendMessage(tabs[0].id, { action: "toggleBarra" });
+            if (!tabs[0]) return;
+            chrome.tabs.sendMessage(tabs[0].id, { action: "toggleBarra" }).catch(() => {
+                // Silenciar error si el script no está cargado
+            });
         });
     }
 });
@@ -10,17 +13,19 @@ chrome.commands.onCommand.addListener((command) => {
 // Escucha globalmente los atajos listados en manifest.json y evita errores si la pestaña no admite content scripts
 chrome.commands.onCommand.addListener((command) => {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-
+        if (!tabs[0]) return;
         chrome.tabs.sendMessage(tabs[0].id, { action: command })
             .catch(() => {
-                // No pasa nada: la pestaña no admite content scripts.
+                // No pasa nada: la pestaña no admite content scripts o no está lista.
             });
     });
 });
 
 // Clic en el icono de la extensión
 chrome.action.onClicked.addListener((tab) => {
-    chrome.tabs.sendMessage(tab.id, { action: "toggleBarra" });
+    chrome.tabs.sendMessage(tab.id, { action: "toggleBarra" }).catch(() => {
+        // Silenciar error si el script no está cargado
+    });
 });
 
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
@@ -40,7 +45,9 @@ chrome.commands.onCommand.addListener(async (command) => { // Listener global de
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
         if (!tabs[0]) return;
 
-        chrome.tabs.sendMessage(tabs[0].id, { action: "fixMatriculaCommand" });
+        chrome.tabs.sendMessage(tabs[0].id, { action: "fixMatriculaCommand" }).catch(() => {
+            // Silenciar error si el script no está cargado
+        });
     });
 });
 

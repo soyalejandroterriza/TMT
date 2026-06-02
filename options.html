@@ -1,72 +1,230 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>NG CPT - Configuración</title>
+    <title>TMT - Configuración</title>
     <style>
+        :root {
+            --bg-body: #f4f7f6;
+            --text-main: #2c3e50;
+            --card-bg: #ffffff;
+            --accent: #27A844;
+            --border: #e0e0e0;
+            --text-muted: #7f8c8d;
+        }
+
         body {
-            font-family: Arial;
-            padding: 20px;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
-        label {
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+
+        .header p {
+            margin: 5px 0 0 0;
+            color: var(--text-muted);
+            font-size: 15px;
+        }
+
+        .grid-container {
+            display: grid;
+            /* El grid se adaptará horizontalmente y pasará a vertical si no hay espacio */
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+            width: 100%;
+            max-width: 1100px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+            border: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .card-header h2 {
+            margin: 0;
             font-size: 18px;
-            cursor: pointer;
+            color: var(--accent);
         }
-        .section {
-            margin-top: 20px;
+
+        .setting-group {
+            margin-bottom: 24px;
+        }
+
+        .setting-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .setting-label {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            cursor: pointer;
+            font-size: 15px;
+            line-height: 1.5;
+            user-select: none;
+        }
+
+        .setting-label input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            margin-top: 2px;
+            accent-color: var(--accent);
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .setting-title {
+            font-weight: 500;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .setting-desc {
+            font-size: 13.5px;
+            color: var(--text-muted);
+            display: block;
+        }
+
+        select {
+            padding: 10px 14px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+            width: 100%;
+            margin-top: 8px;
+            cursor: pointer;
+            background-color: #fff;
+            color: var(--text-main);
+            outline: none;
+            transition: border-color 0.2s ease;
+        }
+
+        select:focus {
+            border-color: var(--accent);
+        }
+
+        .note {
+            font-size: 13px;
+            color: #856404;
+            background-color: #fff3cd;
+            border-left: 4px solid #ffeeba;
+            padding: 10px 14px;
+            border-radius: 4px;
+            margin-top: 10px;
+            display: inline-block;
+        }
+
+        .empty-state {
+            color: var(--text-muted);
+            font-style: italic;
+            font-size: 14px;
+            text-align: center;
+            padding: 20px 0;
         }
     </style>
 </head>
 <body>
 
-<h2>Configuración de NG CPT</h2>
+    <div class="header">
+        <h1>Terri Multitool (TMT)</h1>
+        <p>Panel de configuración de utilidades</p>
+    </div>
 
-<div class="section">   <!-- Apertura automática -->
-    <label>
-        <input type="checkbox" id="autoOpen">
-        Activar apertura automática de la herramienta al visitar una orden de NG
-    </label>
-</div>
+    <div class="grid-container">
+        
+        <!-- Tarjeta NGCPT -->
+        <div class="card">
+            <div class="card-header">
+                <h2>NGCPT (Northgate)</h2>
+            </div>
 
-<hr>
+            <div class="setting-group">
+                <label class="setting-label">
+                    <input type="checkbox" id="autoOpen">
+                    <div>
+                        <span class="setting-title">Apertura automática</span>
+                        <span class="setting-desc">Activa el despliegue automático de la herramienta al visitar una orden de NG.</span>
+                    </div>
+                </label>
+            </div>
 
-<div class="section"> <!-- Corrector de matrículas -->
-    <label>
-        <input type="checkbox" id="enableMatShortcut">
-        Activar el atajo para el corrector de matrículas de NG. <br>
-        Utilízalo seleccionando una matrícula válida y pulsando Ctrl + Shift + X<br>
-        <h5>NOTA: Puede generar conflictos con matrículas de policía y guardia civil, que comienzan con letras.</h5>
-    </label>
-</div>
+            <div class="setting-group">
+                <label class="setting-label">
+                    <input type="checkbox" id="enableMatShortcut">
+                    <div>
+                        <span class="setting-title">Corrector de matrículas</span>
+                        <span class="setting-desc">
+                            Permite corregir formatos de matrícula seleccionando el texto y usando el atajo de teclado configurado en tu navegador.<br>
+                            <div class="note"><b>Nota:</b> Puede generar conflictos con matrículas especiales (policía, guardia civil) que comienzan con letras.</div>
+                        </span>
+                    </div>
+                </label>
+            </div>
 
-<hr>
+            <div class="setting-group">
+                <div class="setting-title" style="margin-bottom: 8px;">Posición por defecto de la barra</div>
+                <span class="setting-desc">Puedes moverla libremente dentro de cada OR, pero esta será la posición con la que aparecerá al abrir una nueva orden.</span>
+                <select id="barraPos">
+                    <option value="right">Alineada a la Derecha</option>
+                    <option value="left">Alineada a la Izquierda</option>
+                </select>
+            </div>
+        </div>
 
-<div class="section">   <!-- Posición por defecto de la barra -->
-    <label for="barraPos" style="font-size:18px;">
-        <select id="barraPos" style="font-size:16px; padding:6px;">
-        <option value="right">Derecha</option>
-        <option value="left">Izquierda</option>
-    </select>
-        Posición por defecto de la barra (puedes moverla en cada OR, pero se abrirá aquí cuando visites una nueva):
-    </label>
-    
-</div>
+        <!-- Tarjeta NFBAR -->
+        <div class="card">
+            <div class="card-header">
+                <h2>NFBAR (NextFleet)</h2>
+            </div>
 
-<hr>
+            <div class="setting-group">
+                <label class="setting-label">
+                    <input type="checkbox" id="autoOpenNFBar">
+                    <div>
+                        <span class="setting-title">Desplegar barra automáticamente</span>
+                        <span class="setting-desc">Despliega la barra automáticamente al añadir un nuevo archivo adjunto en NextFleet.</span>
+                    </div>
+                </label>
+            </div>
+        </div>
 
-<div class="section">  <!-- Nombre del técnico -->
-    <label for="technicianName" style="font-size:18px; display:block; margin-bottom:6px;">
-        Nombre del técnico (se usará al generar textos):
-    </label>
-           <input type="text" id="technicianName" placeholder="TU NOMBRE AQUÍ">
-</div>
+    </div>
 
-
-
-
-
-
-<script src="options.js"></script>
-
+    <script src="options.js"></script>
 </body>
 </html>

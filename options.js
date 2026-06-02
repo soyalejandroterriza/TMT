@@ -30,24 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-    //
-    // === NOMBRE DEL TÉCNICO ===
-    //
-    chrome.storage.sync.get("technicianName", ({ technicianName }) => {
 
-        // Valor por defecto
-        if (!technicianName) {
-            technicianName = "TECNICO";
-            chrome.storage.sync.set({ technicianName });
-        }
-
-        document.getElementById("technicianName").value = technicianName;
-    });
-
-    // Guardar cuando escribe
-    document.getElementById("technicianName").addEventListener("input", (e) => {
-        chrome.storage.sync.set({ technicianName: e.target.value.trim() });
-    });
 
 
 
@@ -60,6 +43,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.getElementById("enableMatShortcut").addEventListener("change", (e) => {
         chrome.storage.sync.set({ enableMatShortcut: e.target.checked });
+    });
+    //
+    // === AUTO-OPEN NFBAR ===
+    //
+    chrome.storage.sync.get("autoOpenNFBar", ({ autoOpenNFBar }) => {
+        if (autoOpenNFBar === undefined) {
+            autoOpenNFBar = true;
+            chrome.storage.sync.set({ autoOpenNFBar: true });
+        }
+        document.getElementById("autoOpenNFBar").checked = autoOpenNFBar;
+    });
+
+    document.getElementById("autoOpenNFBar").addEventListener("change", (e) => {
+        chrome.storage.sync.set({ autoOpenNFBar: e.target.checked });
     });
 
 });

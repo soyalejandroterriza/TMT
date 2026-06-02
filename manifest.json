@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "NG CPT",
+  "name": "TMT - Terri Multitool",
   "version": "1.0",
-  "description": "NG Cherrypicking tool --- Pulsa Ctrl + Shift + Espacio en una página de orden de NG para habilitar.",
+  "description": "TMT - Terri Multitool. Incluye componentes para NGCPT y NextFleet.",
 
   "permissions": ["activeTab", "scripting", "storage"],
 
@@ -15,7 +15,7 @@
       "suggested_key": {
         "default": "Ctrl+Shift+Space"
       },
-      "description": "Mostrar / Ocultar barra"
+      "description": "Desplegar barra"
     },
 
     "fix-matricula": {
@@ -33,7 +33,7 @@
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["content.js"]
+      "js": ["ngcpt_bar.js", "nextfleet_bar.js", "content.js"]
     }
   ],
 
@@ -49,14 +49,6 @@
       "48": "48.png",
       "128": "128.png"
     },
-    "default_title": "NG CPT — Mostrar barra" 
-  },
-
-  "web_accessible_resources": [
-  {
-    "resources": ["mensaje_whatsapp.txt"],
-    "matches": ["<all_urls>"]
+    "default_title": "TMT — Mostrar barra" 
   }
-]
-
 }
