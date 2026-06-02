@@ -59,4 +59,34 @@ document.addEventListener("DOMContentLoaded", () => {
         chrome.storage.sync.set({ autoOpenNFBar: e.target.checked });
     });
 
+    //
+    // === HABILITAR COMANDOS AUTODATE ===
+    //
+    chrome.storage.sync.get("enableAutoDate", ({ enableAutoDate }) => {
+        if (enableAutoDate === undefined) {
+            enableAutoDate = true;
+            chrome.storage.sync.set({ enableAutoDate: true });
+        }
+        document.getElementById("enableAutoDate").checked = enableAutoDate;
+    });
+
+    document.getElementById("enableAutoDate").addEventListener("change", (e) => {
+        chrome.storage.sync.set({ enableAutoDate: e.target.checked });
+    });
+
+    //
+    // === HABILITAR COMANDO AUTONG ===
+    //
+    chrome.storage.sync.get("enableAutoNg", ({ enableAutoNg }) => {
+        if (enableAutoNg === undefined) {
+            enableAutoNg = true;
+            chrome.storage.sync.set({ enableAutoNg: true });
+        }
+        document.getElementById("enableAutoNg").checked = enableAutoNg;
+    });
+
+    document.getElementById("enableAutoNg").addEventListener("change", (e) => {
+        chrome.storage.sync.set({ enableAutoNg: e.target.checked });
+    });
+
 });

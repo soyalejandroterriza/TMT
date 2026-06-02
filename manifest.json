@@ -3,13 +3,14 @@
   "name": "TMT - Terri Multitool",
   "version": "1.0",
   "description": "TMT - Terri Multitool. Incluye componentes para NGCPT y NextFleet.",
-
-  "permissions": ["activeTab", "scripting", "storage"],
-
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "storage"
+  ],
   "background": {
     "service_worker": "background.js"
   },
-
   "commands": {
     "toggle-barra": {
       "suggested_key": {
@@ -17,38 +18,51 @@
       },
       "description": "Desplegar barra"
     },
-
     "fix-matricula": {
-    "suggested_key": {
+      "suggested_key": {
         "default": "Ctrl+Shift+X"
+      },
+      "description": "Corregir matrícula seleccionada"
     },
-    "description": "Corregir matrícula seleccionada"
-}
-
+    "auto-date": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+2",
+        "mac": "MacCtrl+Shift+2"
+      },
+      "description": "Insertar fecha AutoDate (XX/YY)"
+    },
+    "auto-ng": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+3",
+        "mac": "MacCtrl+Shift+3"
+      },
+      "description": "AutoNG: Abrir orden de Northgate seleccionada"
+    }
   },
-
   "options_page": "options.html",
-
-
   "content_scripts": [
     {
-      "matches": ["<all_urls>"],
-      "js": ["ngcpt_bar.js", "nextfleet_bar.js", "content.js"]
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "ngcpt_bar.js",
+        "nextfleet_bar.js",
+        "content.js"
+      ]
     }
   ],
-
   "icons": {
     "16": "16.png",
     "48": "48.png",
     "128": "128.png"
   },
-
   "action": {
     "default_icon": {
       "16": "16.png",
       "48": "48.png",
       "128": "128.png"
     },
-    "default_title": "TMT — Mostrar barra" 
+    "default_title": "TMT — Mostrar barra"
   }
 }

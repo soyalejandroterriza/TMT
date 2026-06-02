@@ -25,18 +25,95 @@ function isOtherDomain() {
     }
 })();
 
+// Función para insertar la fecha de hoy en formato DD/MM (XX/YY) en el cursor del elemento activo
+function insertAutoDate() {
+    const active = document.activeElement;
+    if (!active) return;
+    if (!(active.tagName === "INPUT" || active.tagName === "TEXTAREA")) return;
+    if (typeof active.selectionStart !== "number") return;
+
+    const now = new Date();
+    const day = String(now.getDate()).padStart(2, '0');
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const dateStr = `${day}/${month}`;
+
+    const selStart = active.selectionStart;
+    const selEnd = active.selectionEnd;
+    
+    const newValue = 
+        active.value.substring(0, selStart) +
+        dateStr +
+        active.value.substring(selEnd);
+
+    if (active.setRangeText) {
+        active.setRangeText(dateStr, selStart, selEnd, "end");
+        active.dispatchEvent(new Event('input', { bubbles: true }));
+        active.dispatchEvent(new Event('change', { bubbles: true }));
+    } else {
+        active.value = newValue;
+        const newPos = selStart + dateStr.length;
+        active.selectionStart = active.selectionEnd = newPos;
+        active.dispatchEvent(new Event('input', { bubbles: true }));
+        active.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+}
+
+// Obtiene el texto seleccionado en la página (tanto texto plano como dentro de inputs/textareas)
+function getSelectedText() {
+    let text = "";
+    const active = document.activeElement;
+    if (active && (active.tagName === "INPUT" || active.tagName === "TEXTAREA")) {
+        const start = active.selectionStart;
+        const end = active.selectionEnd;
+        if (typeof start === "number" && typeof end === "number") {
+            text = active.value.substring(start, end);
+        }
+    }
+    if (!text && window.getSelection) {
+        text = window.getSelection().toString();
+    }
+    return text.trim();
+}
+
+// Ejecuta la apertura de una nueva orden de Northgate en base al texto seleccionado
+function runAutoNg() {
+    const selected = getSelectedText();
+    if (!selected) return;
+
+    const url = `https://nthp.northgateplc.es/pro/web/orden.html?id=${encodeURIComponent(selected)}`;
+    chrome.runtime.sendMessage({ action: "openTab", url: url });
+}
+window.runAutoNg = runAutoNg;
+
 // Delegador de mensajes del Background (comandos/atajos)
 chrome.runtime.onMessage.addListener((msg) => {
+    // 1. Comandos globales (disponibles en cualquier dominio)
+    if (msg.action === "auto-date") {
+        chrome.storage.sync.get("enableAutoDate", ({ enableAutoDate }) => {
+            if (enableAutoDate !== false) { // Habilitado por defecto si es undefined
+                insertAutoDate();
+            }
+        });
+    } else if (msg.action === "auto-ng") {
+        chrome.storage.sync.get("enableAutoNg", ({ enableAutoNg }) => {
+            if (enableAutoNg !== false) { // Habilitado por defecto si es undefined
+                runAutoNg();
+            }
+        });
+    } else if (msg.action === "fixMatriculaCommand") {
+        if (window.NGCPTBar && typeof window.NGCPTBar.fixMatricula === "function") {
+            window.NGCPTBar.fixMatricula();
+        }
+    }
+
+    // 2. Comandos específicos de barra por dominio
     if (isNorthgateDomain() && window.NGCPTBar) {
         if (msg.action === "toggleBarra") {
             window.NGCPTBar.toggle();
-        } else if (msg.action === "fixMatriculaCommand") {
-            window.NGCPTBar.fixMatricula();
         }
     } else if (isOtherDomain() && window.NextfleetBar) {
         if (msg.action === "toggleBarra") {
             window.NextfleetBar.toggle();
         }
-        // Agrega atajos específicos para la otra barra si fuesen necesarios
     }
 });

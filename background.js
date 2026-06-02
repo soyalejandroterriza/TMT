@@ -31,6 +31,8 @@ chrome.action.onClicked.addListener((tab) => {
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     if (msg.action === "openOptions") {
         chrome.runtime.openOptionsPage();
+    } else if (msg.action === "openTab") {
+        chrome.tabs.create({ url: msg.url });
     }
 });
 

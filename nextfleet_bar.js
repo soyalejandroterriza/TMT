@@ -157,8 +157,7 @@ window.NextfleetBar = (function() {
             configBtn.style.transform = "translateY(0)";
             configBtn.style.boxShadow = "0 2px 4px rgba(0,0,0,0.1)";
         });
-
-        configBtn.addEventListener("click", () => {
+         configBtn.addEventListener("click", () => {
             configBtn.style.transform = "scale(0.95)";
             setTimeout(() => {
                 configBtn.style.transform = "translateY(-2px)";
@@ -166,6 +165,47 @@ window.NextfleetBar = (function() {
             chrome.runtime.sendMessage({ action: "openOptions" });
         });
 
+        // Botón especial de AutoNG (Azul)
+        const autoNgBtn = document.createElement("button");
+        autoNgBtn.textContent = "AutoNG";
+        autoNgBtn.title = "Abrir orden de Northgate del texto seleccionado";
+        Object.assign(autoNgBtn.style, {
+            background: "#007bff",
+            border: "1px solid #0056b3",
+            color: "#ffffff",
+            borderRadius: "6px",
+            padding: "8px 16px",
+            fontSize: "13px",
+            fontWeight: "600",
+            cursor: "pointer",
+            transition: "all 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
+            boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+            outline: "none"
+        });
+
+        autoNgBtn.addEventListener("mouseenter", () => {
+            autoNgBtn.style.background = "#3395ff";
+            autoNgBtn.style.transform = "translateY(-2px)";
+            autoNgBtn.style.boxShadow = "0 4px 12px rgba(0, 123, 255, 0.3)";
+        });
+
+        autoNgBtn.addEventListener("mouseleave", () => {
+            autoNgBtn.style.background = "#007bff";
+            autoNgBtn.style.transform = "translateY(0)";
+            autoNgBtn.style.boxShadow = "0 2px 4px rgba(0,0,0,0.1)";
+        });
+
+        autoNgBtn.addEventListener("click", () => {
+            autoNgBtn.style.transform = "scale(0.95)";
+            setTimeout(() => {
+                autoNgBtn.style.transform = "translateY(-2px)";
+            }, 100);
+            if (window.runAutoNg) {
+                window.runAutoNg();
+            }
+        });
+
+        buttonsContainer.appendChild(autoNgBtn);
         buttonsContainer.appendChild(configBtn);
 
         barra.appendChild(buttonsContainer);
@@ -400,56 +440,9 @@ window.NextfleetBar = (function() {
         }
     }
 
-    // Sistema de notificaciones integradas (Toast)
+    // Sistema de notificaciones integradas (Toast) - Deshabilitado a petición del usuario
     function mostrarToast(mensaje, esError = false) {
-        if (!toastContainer) {
-            toastContainer = document.createElement("div");
-            toastContainer.id = "ng-cpt-toast-container";
-            Object.assign(toastContainer.style, {
-                position: "fixed",
-                bottom: "20px",
-                right: "20px",
-                display: "flex",
-                flexDirection: "column",
-                gap: "8px",
-                zIndex: "9999999999",
-                fontFamily: "system-ui, sans-serif"
-            });
-            document.documentElement.appendChild(toastContainer);
-        }
-
-        const toast = document.createElement("div");
-        toast.textContent = mensaje;
-        Object.assign(toast.style, {
-            backgroundColor: "rgba(25, 25, 25, 0.9)",
-            color: "#ffffff",
-            padding: "10px 18px",
-            borderRadius: "6px",
-            fontSize: "12px",
-            fontWeight: "500",
-            boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
-            borderLeft: esError ? "3px solid #FF4949" : "3px solid #00FF87",
-            opacity: "0",
-            transform: "translateY(20px)",
-            transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
-        });
-
-        toastContainer.appendChild(toast);
-
-        // Forzar reflujo e iniciar animación de entrada
-        setTimeout(() => {
-            toast.style.opacity = "1";
-            toast.style.transform = "translateY(0)";
-        }, 10);
-
-        // Desvanecimiento y remoción después de 3 segundos
-        setTimeout(() => {
-            toast.style.opacity = "0";
-            toast.style.transform = "translateY(-10px)";
-            setTimeout(() => {
-                toast.remove();
-            }, 300);
-        }, 3000);
+        // No-op: las notificaciones visuales han sido desactivadas para no molestar la UI nativa.
     }
 
     function inyectarEstilosAnimacion() {
