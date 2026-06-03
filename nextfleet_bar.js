@@ -47,168 +47,43 @@ window.NextfleetBar = (function() {
         }
     }
 
-    function crearBarra() {
+     function crearBarra() {
         // Crear elemento principal de la barra
         barra = document.createElement("div");
-        barra.id = "ng-cpt-barra-horizontal";
+        barra.id = "ng-cpt-barra-vertical";
         
-        // Estilos CSS modernos con Glassmorphism y diseño premium
+        // Estilos CSS modernos con Glassmorphism y diseño premium (barra vertical a la derecha)
         Object.assign(barra.style, {
             position: "fixed",
             top: "0",
-            left: "0",
-            width: "100%",
-            backgroundColor: "rgba(18, 18, 18, 0.82)",
+            right: "0",
+            width: "280px",
+            height: "100vh",
+            backgroundColor: "rgba(18, 18, 18, 0.85)",
             backdropFilter: "blur(15px)",
             webkitBackdropFilter: "blur(15px)",
-            borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
-            boxShadow: "0 4px 30px rgba(0, 0, 0, 0.4)",
+            borderLeft: "1px solid rgba(255, 255, 255, 0.08)",
+            boxShadow: "-4px 0 30px rgba(0, 0, 0, 0.4)",
             zIndex: "999999999",
             display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-            padding: "10px 24px",
+            flexDirection: "column",
+            alignItems: "stretch",
+            justifyContent: "flex-start",
+            padding: "20px 16px",
             boxSizing: "border-box",
             fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif",
-            transition: "all 0.3s ease"
+            transition: "all 0.3s ease",
+            overflowY: "auto"
         });
 
-        // Contenedor e Identidad visual de la barra (Logo / Etiqueta)
+        // Contenedor superior (solo botón de cerrar)
         const brandContainer = document.createElement("div");
         Object.assign(brandContainer.style, {
             display: "flex",
-            alignItems: "center",
-            gap: "10px"
+            justifyContent: "flex-end",
+            marginBottom: "15px",
+            flexShrink: "0"
         });
-
-        const logo = document.createElement("div");
-        logo.textContent = "⚡";
-        Object.assign(logo.style, {
-            fontSize: "18px",
-            animation: "pulse 2s infinite alternate"
-        });
-
-        const brandText = document.createElement("span");
-        brandText.textContent = "TMT - Terriza 2026";
-        Object.assign(brandText.style, {
-            color: "#ffffff",
-            fontWeight: "bold",
-            fontSize: "13px",
-            letterSpacing: "1px",
-            background: "linear-gradient(45deg, #00FF87, #60EFFF)",
-            webkitBackgroundClip: "text",
-            webkitTextFillColor: "transparent"
-        });
-
-        brandContainer.appendChild(logo);
-        brandContainer.appendChild(brandText);
-        barra.appendChild(brandContainer);
-
-        // Contenedor de botones rápidos
-        const buttonsContainer = document.createElement("div");
-        Object.assign(buttonsContainer.style, {
-            display: "flex",
-            flexDirection: "row",
-            gap: "10px",
-            alignItems: "center",
-            justifyContent: "center",
-            flexWrap: "wrap",
-            flex: "1",
-            margin: "0 20px"
-        });
-
-        const listadoBotones = [
-            "matricula", "kms", "diagnosis", "desgaste", 
-            "medidas", "pastillas", "discos", "frenos", "material viejo"
-        ];
-
-        listadoBotones.forEach(id => {
-            const btn = crearBotonRapido(id);
-            buttonsContainer.appendChild(btn);
-        });
-
-        // Botón especial de configuración (Amarillo)
-        const configBtn = document.createElement("button");
-        configBtn.textContent = "configuración";
-        configBtn.title = "Abrir panel de configuración";
-        Object.assign(configBtn.style, {
-            background: "#FFCC00",
-            border: "1px solid #E5B800",
-            color: "#1a1a1a",
-            borderRadius: "6px",
-            padding: "8px 16px",
-            fontSize: "13px",
-            fontWeight: "600",
-            cursor: "pointer",
-            transition: "all 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
-            boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-            outline: "none"
-        });
-
-        configBtn.addEventListener("mouseenter", () => {
-            configBtn.style.background = "#FFE066";
-            configBtn.style.transform = "translateY(-2px)";
-            configBtn.style.boxShadow = "0 4px 12px rgba(255, 204, 0, 0.3)";
-        });
-
-        configBtn.addEventListener("mouseleave", () => {
-            configBtn.style.background = "#FFCC00";
-            configBtn.style.transform = "translateY(0)";
-            configBtn.style.boxShadow = "0 2px 4px rgba(0,0,0,0.1)";
-        });
-         configBtn.addEventListener("click", () => {
-            configBtn.style.transform = "scale(0.95)";
-            setTimeout(() => {
-                configBtn.style.transform = "translateY(-2px)";
-            }, 100);
-            chrome.runtime.sendMessage({ action: "openOptions" });
-        });
-
-        // Botón especial de AutoNG (Azul)
-        const autoNgBtn = document.createElement("button");
-        autoNgBtn.textContent = "AutoNG";
-        autoNgBtn.title = "Abrir orden de Northgate del texto seleccionado";
-        Object.assign(autoNgBtn.style, {
-            background: "#007bff",
-            border: "1px solid #0056b3",
-            color: "#ffffff",
-            borderRadius: "6px",
-            padding: "8px 16px",
-            fontSize: "13px",
-            fontWeight: "600",
-            cursor: "pointer",
-            transition: "all 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
-            boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-            outline: "none"
-        });
-
-        autoNgBtn.addEventListener("mouseenter", () => {
-            autoNgBtn.style.background = "#3395ff";
-            autoNgBtn.style.transform = "translateY(-2px)";
-            autoNgBtn.style.boxShadow = "0 4px 12px rgba(0, 123, 255, 0.3)";
-        });
-
-        autoNgBtn.addEventListener("mouseleave", () => {
-            autoNgBtn.style.background = "#007bff";
-            autoNgBtn.style.transform = "translateY(0)";
-            autoNgBtn.style.boxShadow = "0 2px 4px rgba(0,0,0,0.1)";
-        });
-
-        autoNgBtn.addEventListener("click", () => {
-            autoNgBtn.style.transform = "scale(0.95)";
-            setTimeout(() => {
-                autoNgBtn.style.transform = "translateY(-2px)";
-            }, 100);
-            if (window.runAutoNg) {
-                window.runAutoNg();
-            }
-        });
-
-        buttonsContainer.appendChild(autoNgBtn);
-        buttonsContainer.appendChild(configBtn);
-
-        barra.appendChild(buttonsContainer);
 
         // Botón de cerrar barra
         const closeBtn = document.createElement("button");
@@ -236,7 +111,142 @@ window.NextfleetBar = (function() {
             toggleBarra();
         });
 
-        barra.appendChild(closeBtn);
+        brandContainer.appendChild(closeBtn);
+        barra.appendChild(brandContainer);
+
+        // Contenedor de botones rápidos
+        const buttonsContainer = document.createElement("div");
+        Object.assign(buttonsContainer.style, {
+            display: "flex",
+            flexDirection: "column",
+            gap: "8px",
+            alignItems: "stretch",
+            width: "100%",
+            boxSizing: "border-box"
+        });
+
+        // Botón especial de configuración (Amarillo) - AL PRINCIPIO
+        const configBtn = document.createElement("button");
+        configBtn.textContent = "configuración";
+        configBtn.title = "Abrir panel de configuración";
+        Object.assign(configBtn.style, {
+            background: "#FFCC00",
+            border: "1px solid #E5B800",
+            color: "#1a1a1a",
+            borderRadius: "6px",
+            padding: "10px 16px",
+            fontSize: "13px",
+            fontWeight: "600",
+            cursor: "pointer",
+            width: "100%",
+            transition: "all 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
+            boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+            outline: "none",
+            boxSizing: "border-box"
+        });
+
+        configBtn.addEventListener("mouseenter", () => {
+            configBtn.style.background = "#FFE066";
+            configBtn.style.transform = "translateY(-2px)";
+            configBtn.style.boxShadow = "0 4px 12px rgba(255, 204, 0, 0.3)";
+        });
+
+        configBtn.addEventListener("mouseleave", () => {
+            configBtn.style.background = "#FFCC00";
+            configBtn.style.transform = "translateY(0)";
+            configBtn.style.boxShadow = "0 2px 4px rgba(0,0,0,0.1)";
+        });
+
+        configBtn.addEventListener("click", () => {
+            configBtn.style.transform = "scale(0.95)";
+            setTimeout(() => {
+                configBtn.style.transform = "translateY(-2px)";
+            }, 100);
+            chrome.runtime.sendMessage({ action: "openOptions" });
+        });
+
+        // Botón especial de AutoNG (Azul) - AL PRINCIPIO
+        const autoNgBtn = document.createElement("button");
+        autoNgBtn.textContent = "AutoNG";
+        autoNgBtn.title = "Abrir orden de Northgate del texto seleccionado";
+        Object.assign(autoNgBtn.style, {
+            background: "#007bff",
+            border: "1px solid #0056b3",
+            color: "#ffffff",
+            borderRadius: "6px",
+            padding: "10px 16px",
+            fontSize: "13px",
+            fontWeight: "600",
+            cursor: "pointer",
+            width: "100%",
+            transition: "all 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
+            boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+            outline: "none",
+            boxSizing: "border-box"
+        });
+
+        autoNgBtn.addEventListener("mouseenter", () => {
+            autoNgBtn.style.background = "#3395ff";
+            autoNgBtn.style.transform = "translateY(-2px)";
+            autoNgBtn.style.boxShadow = "0 4px 12px rgba(0, 123, 255, 0.3)";
+        });
+
+        autoNgBtn.addEventListener("mouseleave", () => {
+            autoNgBtn.style.background = "#007bff";
+            autoNgBtn.style.transform = "translateY(0)";
+            autoNgBtn.style.boxShadow = "0 2px 4px rgba(0,0,0,0.1)";
+        });
+
+        autoNgBtn.addEventListener("click", () => {
+            autoNgBtn.style.transform = "scale(0.95)";
+            setTimeout(() => {
+                autoNgBtn.style.transform = "translateY(-2px)";
+            }, 100);
+            if (window.runAutoNg) {
+                window.runAutoNg();
+            }
+        });
+
+        buttonsContainer.appendChild(configBtn);
+        buttonsContainer.appendChild(autoNgBtn);
+
+        // Separador visual
+        const sep = document.createElement("div");
+        Object.assign(sep.style, {
+            height: "1px",
+            background: "rgba(255, 255, 255, 0.1)",
+            margin: "8px 0"
+        });
+        buttonsContainer.appendChild(sep);
+
+        const grupos = {
+            "ESENCIAL": ["matricula", "kms"],
+            "NEUMATICOS": ["desgaste neum. delanteros", "desgaste neum. traseros", "pinchazo", "medidas"],
+            "FRENOS": ["pastillas", "pastillas viejas", "discos", "discos viejos"],
+            "VARIOS": ["diagnosis", "daño", "material viejo"]
+        };
+
+        for (const [nombreGrupo, botones] of Object.entries(grupos)) {
+            const header = document.createElement("div");
+            header.textContent = nombreGrupo;
+            Object.assign(header.style, {
+                fontSize: "11px",
+                fontWeight: "bold",
+                color: "rgba(255, 255, 255, 0.4)",
+                letterSpacing: "1px",
+                marginTop: "16px",
+                marginBottom: "6px",
+                textTransform: "uppercase"
+            });
+            buttonsContainer.appendChild(header);
+
+            botones.forEach(id => {
+                const btn = crearBotonRapido(id);
+                buttonsContainer.appendChild(btn);
+            });
+        }
+
+        barra.appendChild(buttonsContainer);
 
         // Inyectar en el documento
         document.documentElement.appendChild(barra);
@@ -253,19 +263,20 @@ window.NextfleetBar = (function() {
         btn.textContent = id.toLowerCase();
         btn.dataset.id = id;
 
-        // Estilos del botón
+        // Estilos del botón (adaptados a layout vertical)
         Object.assign(btn.style, {
             background: "rgba(255, 255, 255, 0.05)",
             border: "1px solid rgba(255, 255, 255, 0.12)",
             color: "#e0e0e0",
             borderRadius: "6px",
-            padding: "8px 16px",
+            padding: "10px 16px",
             fontSize: "13px",
             fontWeight: "500",
             cursor: "pointer",
+            width: "100%",
             transition: "all 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
             boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-            outline: "none"
+            outline: "none",
         });
 
         // Hover y Focus
