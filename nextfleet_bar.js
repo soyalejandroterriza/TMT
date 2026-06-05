@@ -5,6 +5,14 @@ window.NextfleetBar = (function() {
     function init() {
         console.log("TMT - NextFleet: Módulo cargado.");
 
+        // Observar redimensionado de pantalla y cambios en DOM
+        window.addEventListener("resize", () => {
+            if (barra && barra.style.display !== "none") {
+                ajustarPosicionBarra();
+            }
+        });
+        iniciarObservadorDOM();
+
         // Escuchar clics en el documento para detectar acciones de adjuntar archivos
         document.addEventListener("click", (e) => {
             const target = e.target;
@@ -45,6 +53,66 @@ window.NextfleetBar = (function() {
                 mostrarToast("Barra rápida mostrada");
             }
         }
+        if (barra && barra.style.display !== "none") {
+            ajustarPosicionBarra();
+            // Reintentos asíncronos para acoplarse conforme se completa la transición CSS de apertura
+            setTimeout(ajustarPosicionBarra, 100);
+            setTimeout(ajustarPosicionBarra, 250);
+            setTimeout(ajustarPosicionBarra, 500);
+            setTimeout(ajustarPosicionBarra, 1000);
+        }
+    }
+
+    function ajustarPosicionBarra() {
+        if (!barra) return;
+        const offcanvas = document.getElementById("contenedor-Cuerpo-Ficha") || 
+                          document.querySelector('[id*="contenedor-Cuerpo-Ficha"]') ||
+                          document.querySelector(".contenedor-Cuerpo-Ficha") || 
+                          document.querySelector(".offcanvas-body");
+        
+        if (offcanvas) {
+            const parent = offcanvas.closest('.offcanvas') || offcanvas.parentElement || offcanvas;
+            const elements = [parent, ...parent.querySelectorAll('*')];
+            const candidates = [];
+            
+            // Límite izquierdo mínimo para considerar que un elemento pertenece al panel derecho
+            // (el panel blanco normalmente no empieza a menos de 850px de la derecha, o sea, su left debe ser >= innerWidth - 850)
+            const minLeftForPanel = window.innerWidth - 850;
+            
+            for (const el of elements) {
+                const rect = el.getBoundingClientRect();
+                const widthVal = rect.width || el.offsetWidth || 0;
+                
+                // Buscamos elementos cuyo ancho sea el de un panel visual normal (300px a 800px)
+                if (widthVal >= 300 && widthVal <= 800) {
+                    if (rect.left >= minLeftForPanel && rect.left < window.innerWidth) {
+                        candidates.push({ el, left: rect.left });
+                    }
+                }
+            }
+            
+            // Ordenamos de menor a mayor 'left' para encontrar el borde izquierdo más externo (el inicio del panel blanco)
+            if (candidates.length > 0) {
+                candidates.sort((a, b) => a.left - b.left);
+                const targetLeft = candidates[0].left;
+                console.log("TMT: Borde izquierdo del panel visual detectado en (mínimo left en zona derecha):", targetLeft);
+                barra.style.right = `${window.innerWidth - targetLeft}px`;
+                return;
+            }
+        }
+        barra.style.right = "0";
+    }
+
+    function iniciarObservadorDOM() {
+        const observer = new MutationObserver(() => {
+            if (barra && barra.style.display !== "none") {
+                ajustarPosicionBarra();
+            }
+        });
+        observer.observe(document.documentElement, {
+            childList: true,
+            subtree: true
+        });
     }
 
      function crearBarra() {
@@ -250,6 +318,12 @@ window.NextfleetBar = (function() {
 
         // Inyectar en el documento
         document.documentElement.appendChild(barra);
+
+        // Ajustar posición inicial a la izquierda del div si existe
+        ajustarPosicionBarra();
+        setTimeout(ajustarPosicionBarra, 100);
+        setTimeout(ajustarPosicionBarra, 250);
+        setTimeout(ajustarPosicionBarra, 500);
 
         // Inyectar animaciones clave por CSS
         inyectarEstilosAnimacion();
