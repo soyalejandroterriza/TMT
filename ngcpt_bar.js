@@ -1,4 +1,5 @@
 window.NGCPTBar = (function () {
+    let pollingInterval = null;
 
 
     // Detectar automáticamente si estamos en una orden NG
@@ -103,6 +104,29 @@ window.NGCPTBar = (function () {
     }
 
 
+    function startPolling() {
+        if (pollingInterval) return;
+        // Primer intento inmediato
+        get_data();
+        
+        pollingInterval = setInterval(() => {
+            const order_id = get_order_id();
+            if (order_id) {
+                get_data();
+                stopPolling();
+            } else {
+                get_data();
+            }
+        }, 500);
+    }
+
+    function stopPolling() {
+        if (pollingInterval) {
+            clearInterval(pollingInterval);
+            pollingInterval = null;
+        }
+    }
+
     //Habilitar y deshabilitar barra con comando
     function toggleBarra() {
         let barra = document.getElementById("mi-barra-superior");
@@ -141,8 +165,8 @@ window.NGCPTBar = (function () {
                 // ⬇️ DESPUÉS crear botones
                 ensureUtilityButtons();
 
-                // ⬇️ Y FINALMENTE, lanzar GET automáticamente
-                //get_data(); No lo lanzamos automáticmaente para prevenir que la barra se cree y se rellene de manera automática con campos faltantes. NG no sirve todos los datos de manera simultánea.
+                // Activar polling automático de datos al crear la barra
+                startPolling();
             });
 
         } else {
@@ -152,7 +176,9 @@ window.NGCPTBar = (function () {
 
             if (wasHidden) {
                 clean_data();
-                get_data(); // ⬅️ mostrar → refrescar datos automáticamente
+                startPolling(); // ⬅️ mostrar → empezar a buscar datos periódicamente
+            } else {
+                stopPolling();  // ⬅️ ocultar → parar polling
             }
         }
     }
@@ -164,6 +190,7 @@ window.NGCPTBar = (function () {
         const barra = document.getElementById("mi-barra-superior");
         if (barra) {
             barra.style.display = "none";
+            stopPolling(); // Detener polling si se oculta por el botón
         }
     }
 
