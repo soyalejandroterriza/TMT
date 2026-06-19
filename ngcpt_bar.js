@@ -342,13 +342,15 @@ window.NGCPTBar = (function () {
             btn.id = "btn_order_id";
 
             btn.addEventListener("click", () => {
-                if (value) navigator.clipboard.writeText(value);
+                const textToCopy = btn.dataset.clipboardText;
+                if (textToCopy) navigator.clipboard.writeText(textToCopy);
             });
 
             const container = ensureInnerContainer();
             container.appendChild(btn);
         }
 
+        btn.dataset.clipboardText = value || "";
         btn.innerHTML = value ? `<b>OR:</b> ${value}` : "<b>OR:</b> NULO";
         btn.disabled = !value;
 
@@ -362,13 +364,15 @@ window.NGCPTBar = (function () {
             btn.id = "btn_state";
 
             btn.addEventListener("click", () => {
-                if (value) navigator.clipboard.writeText(value);
+                const textToCopy = btn.dataset.clipboardText;
+                if (textToCopy) navigator.clipboard.writeText(textToCopy);
             });
 
             const container = ensureInnerContainer();
             container.appendChild(btn);
         }
 
+        btn.dataset.clipboardText = value || "";
         btn.innerHTML = value ? `<b>Estado:</b> ${value}` : "<b>Estado:</b> NULO";
         btn.disabled = !value;
 
@@ -382,13 +386,15 @@ window.NGCPTBar = (function () {
             btn.id = "btn_matricula";
 
             btn.addEventListener("click", () => {
-                if (value) navigator.clipboard.writeText(value);
+                const textToCopy = btn.dataset.clipboardText;
+                if (textToCopy) navigator.clipboard.writeText(textToCopy);
             });
 
             const container = ensureInnerContainer();
             container.appendChild(btn);
         }
 
+        btn.dataset.clipboardText = value || "";
         btn.innerHTML = value ? `<b>Matricula:</b> ${value}` : "<b>Matricula:</b> NULO";
         btn.disabled = !value;
 
@@ -402,13 +408,15 @@ window.NGCPTBar = (function () {
             btn.id = "btn_km";
 
             btn.addEventListener("click", () => {
-                if (value) navigator.clipboard.writeText(value);
+                const textToCopy = btn.dataset.clipboardText;
+                if (textToCopy) navigator.clipboard.writeText(textToCopy);
             });
 
             const container = ensureInnerContainer();
             container.appendChild(btn);
         }
 
+        btn.dataset.clipboardText = value || "";
         btn.innerHTML = value ? `<b>Kilómetros:</b> ${value}` : "<b>Kilómetros:</b> NULO";
         btn.disabled = !value;
 
@@ -422,13 +430,15 @@ window.NGCPTBar = (function () {
             btn.id = "btn_contact_name";
 
             btn.addEventListener("click", () => {
-                if (value) navigator.clipboard.writeText(value);
+                const textToCopy = btn.dataset.clipboardText;
+                if (textToCopy) navigator.clipboard.writeText(textToCopy);
             });
 
             const container = ensureInnerContainer();
             container.appendChild(btn);
         }
 
+        btn.dataset.clipboardText = value || "";
         btn.innerHTML = value ? `<b>Usuario:</b> ${value}` : "<b>Usuario:</b> NULO";
         btn.disabled = !value;
 
@@ -442,13 +452,15 @@ window.NGCPTBar = (function () {
             btn.id = "btn_contact_phone";
 
             btn.addEventListener("click", () => {
-                if (value) navigator.clipboard.writeText(value);
+                const textToCopy = btn.dataset.clipboardText;
+                if (textToCopy) navigator.clipboard.writeText(textToCopy);
             });
 
             const container = ensureInnerContainer();
             container.appendChild(btn);
         }
 
+        btn.dataset.clipboardText = value || "";
         btn.innerHTML = value ? `<b>TEL:</b> ${value}` : "<b>TEL:</b> NULO";
         btn.disabled = !value;
 
@@ -462,13 +474,15 @@ window.NGCPTBar = (function () {
             btn.id = "btn_shop_zip";
 
             btn.addEventListener("click", () => {
-                if (zip) navigator.clipboard.writeText(zip);
+                const textToCopy = btn.dataset.clipboardText;
+                if (textToCopy) navigator.clipboard.writeText(textToCopy);
             });
 
             const container = ensureInnerContainer();
             container.appendChild(btn);
         }
 
+        btn.dataset.clipboardText = zip || "";
         btn.innerHTML = zip ? `<b>CP:</b> ${zip}` : "<b>CP:</b> NULO";
         btn.disabled = !zip;
 
@@ -482,13 +496,15 @@ window.NGCPTBar = (function () {
             btn.id = "btn_shop_name";
 
             btn.addEventListener("click", () => {
-                if (name) navigator.clipboard.writeText(name);
+                const textToCopy = btn.dataset.clipboardText;
+                if (textToCopy) navigator.clipboard.writeText(textToCopy);
             });
 
             const container = ensureInnerContainer();
             container.appendChild(btn);
         }
 
+        btn.dataset.clipboardText = name || "";
         btn.innerHTML = name ? `<b>Dirección del taller:</b> ${name}` : "<b>Dirección del taller:</b> NULO";
         btn.disabled = !name;
 
@@ -572,13 +588,15 @@ Observaciones: ${OBS}
             btn.id = "btn_cita";
 
             btn.addEventListener("click", () => {
-                if (value) navigator.clipboard.writeText(value);
+                const textToCopy = btn.dataset.clipboardText;
+                if (textToCopy) navigator.clipboard.writeText(textToCopy);
             });
 
             const container = ensureInnerContainer();
             container.appendChild(btn);
         }
 
+        btn.dataset.clipboardText = value || "";
         btn.innerHTML = value ? `<b>Cita:</b> ${value}` : "<b>Cita:</b> NULO";
         btn.disabled = !value;
 
