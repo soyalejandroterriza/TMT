@@ -156,6 +156,16 @@
             text-align: center;
             padding: 20px 0;
         }
+
+        .btn-download:hover {
+            background-color: #218838 !important;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(39, 168, 68, 0.3) !important;
+        }
+
+        .btn-download:active {
+            transform: translateY(1px);
+        }
     </style>
 </head>
 <body>
@@ -247,6 +257,48 @@
                         </span>
                     </div>
                 </label>
+            </div>
+        </div>
+
+        <!-- Tarjeta DESCARGA / ACTUALIZACIÓN -->
+        <div class="card">
+            <div class="card-header">
+                <h2>Descarga y Actualización</h2>
+            </div>
+
+            <div class="setting-group">
+                <span class="setting-title">Descargar TMT (Rama Main)</span>
+                <span class="setting-desc" style="margin-bottom: 12px; display: block;">
+                    Descarga el archivo ZIP con los últimos cambios subidos directamente a la rama <code>main</code> de GitHub. No es necesario esperar a que se publique una nueva release.
+                </span>
+                <a href="https://github.com/soyalejandroterriza/TMT/archive/refs/heads/main.zip" class="btn-download" style="
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    background-color: var(--accent);
+                    color: white;
+                    border: none;
+                    border-radius: 8px;
+                    padding: 12px 18px;
+                    font-size: 14px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    text-decoration: none;
+                    text-align: center;
+                    transition: background-color 0.2s ease, transform 0.1s ease;
+                    width: 100%;
+                    box-sizing: border-box;
+                    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+                ">
+                    📥 Descargar última versión (ZIP)
+                </a>
+                <div class="note" style="margin-top: 15px; width: 100%; box-sizing: border-box;">
+                    <b>Instrucciones de instalación:</b><br>
+                    1. Descomprime el archivo ZIP descargado.<br>
+                    2. Abre en Chrome <b>chrome://extensions/</b>.<br>
+                    3. Activa el <b>Modo de desarrollador</b> (esquina superior derecha).<br>
+                    4. Haz clic en <b>Cargar descomprimida</b> y selecciona la carpeta descomprimida (o haz clic en <b>Actualizar</b> si ya la tenías cargada).
+                </div>
             </div>
         </div>
 
